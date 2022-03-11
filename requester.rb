@@ -46,5 +46,4 @@ module Requester
     end
     return false if action == "n"
   end
-
 end

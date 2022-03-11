@@ -72,6 +72,7 @@ class CliviaGenerator
     validation, name = will_save?(@score)
     data = { name: name, score: @score }
     save(data) if validation
+    @score = 0
   end
 
   def save(data)
@@ -96,17 +97,15 @@ class CliviaGenerator
   def parse_questions(questions)
     # questions came with an unexpected structure, clean them to make it usable for our purposes
     code = HTMLEntities.new
-    arr = questions.map do |question|
-      hash = {:category=>question[:category],
-        :type=>question[:multiple],
-        :difficulty=>question[:difficulty],
-        :question=>code.decode(question[:question]).delete('\\"'),
-        :correct_answer=>code.decode(question[:correct_answer]).delete('\\"'),
-        :incorrect_answers=>question[:incorrect_answers].map { |q| code.decode(q).delete('\\"')}
-      }
+    questions.map do |question|
+      hash = { category: question[:category],
+               type: question[:multiple],
+               difficulty: question[:difficulty],
+               question: code.decode(question[:question]).delete('\\"'),
+               correct_answer: code.decode(question[:correct_answer]).delete('\\"'),
+               incorrect_answers: question[:incorrect_answers].map { |q| code.decode(q).delete('\\"') } }
       @questions << hash
     end
-
   end
 
   def print_scores(arr_scores)
