@@ -1,17 +1,30 @@
 # do not forget to require your gem dependencies
 # do not forget to require_relative your local dependencies
+require_relative 'presenter'
+
+filename = ARGV.shift
 
 class CliviaGenerator
+  include Presenter
   # maybe we need to include a couple of modules?
 
-  def initialize
+  def initialize(filename = "scores.json")
     # we need to initialize a couple of properties here
+    @filename = filename
   end
 
   def start
     # welcome message
-    # prompt the user for an action
-    # keep going until the user types exit
+    print_welcome
+    action = ""
+    until action == "exit"
+      action = get_option
+      case action
+      when "random" then puts "random"
+      when "scores" then puts "scores"
+      when "exit" then puts "Bye! 😎"
+      end
+    end
   end
 
   def random_trivia
@@ -48,5 +61,5 @@ class CliviaGenerator
   end
 end
 
-trivia = CliviaGenerator.new
+trivia = CliviaGenerator.new(filename)
 trivia.start
