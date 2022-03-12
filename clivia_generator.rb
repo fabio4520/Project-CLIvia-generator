@@ -3,6 +3,7 @@
 require "httparty"
 require "htmlentities"
 require "terminal-table"
+require 'colorize'
 require_relative "presenter"
 require_relative "requester"
 
@@ -36,7 +37,7 @@ class CliviaGenerator
         case action
         when "random" then random_trivia
         when "scores" then scores
-        when "exit" then puts "Bye! 😎"
+        when "exit" then puts goodbye
         end
         puts "-" * 50
       rescue HTTParty::ResponseError => e
@@ -60,13 +61,13 @@ class CliviaGenerator
       answer, correct_answer, options = ask_question(@question)
       index = answer - 1
       if index == options.find_index(correct_answer)
-        puts "True... Correct Answer! 😀\n"
+        puts "True".colorize(:green) + "... Correct Answer! 😀\n"
         @score += 10
       else
-        puts "#{options[index]}... Incorrect ! 🧟‍♂️"
-        puts "The correct answer was: #{options[options.find_index(correct_answer)]}\n"
+        puts "#{options[index]}... " + "Incorrect ! 🧟‍♂️".colorize(:red)
+        puts "The correct answer was: ".colorize(:green) + "#{options[options.find_index(correct_answer)]}\n"
       end
-      puts ""
+      puts "-" * 50
       i += 1
     end
     validation, name = will_save?(@score)
